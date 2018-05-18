@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\encryption\CaesarEncryption;
+
 class EncryptionController extends Controller
 {
     //
     public function test() {
-        $str = "Hello world";
-        $arr = ["A", "B", "C"];
-        
-        echo var_dump(array_search("D", $arr));
+//        $ceasar = new CaesarEncryption('TestaBC1290', 7);
+//        
+//        $ceasar->encrypt();
+//        echo '<br><br>';
+//        $ceasar->decrypt();
     }
 }
