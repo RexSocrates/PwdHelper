@@ -60,7 +60,7 @@ class RandomPassword
                     $newCh = $this->lowerCaseAlphabet[rand(0, count($this->lowerCaseAlphabet) - 1)];
                     break;
                 case 4 : 
-                    $newCh = $this->symbol[rand(0, strlen($this->symbol))];
+                    $newCh = $this->symbol[rand(0, strlen($this->symbol) - 1)];
                     break;
             }
             echo 'The new character : '.$newCh.'<br>';

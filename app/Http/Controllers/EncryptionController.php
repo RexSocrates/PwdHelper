@@ -19,6 +19,6 @@ class EncryptionController extends Controller
     }
     
     public function generatePwd() {
-        $pwd = new RandomPassword(20, [1, 3, 4]);
+        $pwd = new RandomPassword(20, [1, 2, 3, 4]);
     }
 }
