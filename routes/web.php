@@ -15,4 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/encryption', 'EncryptionController@test');
+Route::get('/encryption', 'EncryptionController@ceasar');
+
+Route::get('/generatePwd', 'EncryptionController@generatePwd');
