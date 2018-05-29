@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\encryption\CaesarEncryption;
 use App\encryption\Base64Encryption;
+use App\encryption\URLEncryption;
 
 use App\encryption\RandomPassword;
 
@@ -18,6 +19,7 @@ class EncryptionController extends Controller
         $encryptions = [
             'Caesar',
             'Base 64',
+            'URL encryption',
             'Others'
         ];
         
@@ -64,6 +66,16 @@ class EncryptionController extends Controller
                 // 檔案內容
                 $fileContent = $prefix.$base64->encode();
                 break;
+            case 'URL encryption' :
+                $encryptionIndex = 3;
+                
+                $urlencryption = new URLEncryption($data['password']);
+                
+                // 密碼前綴
+                $prefix = $encryptionIndex.'-';
+                
+                // 檔案內容
+                $fileContent = $prefix.$urlencryption->encode();
         }
         
         $file = new PrepareFile($encryptionIndex, $fileContent);
