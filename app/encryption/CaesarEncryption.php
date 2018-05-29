@@ -15,6 +15,8 @@ class CaesarEncryption
     public $lowerCaseAlphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "m",
                          "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
     
+    //特殊符號
+    
     
     
     function __construct($plainText, $offset) {
@@ -54,8 +56,8 @@ class CaesarEncryption
         
         $this->cipherText = $newCypherText;
         
-        echo $this->plainText.'<br>';
-        echo $this->cipherText.'<br>';
+//        echo $this->plainText.'<br>';
+//        echo $this->cipherText.'<br>';
     }
     
     function decrypt() {

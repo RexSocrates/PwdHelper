@@ -15,6 +15,23 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// 取得密碼加密輸入頁面以及加密列表
+Route::get('getEncryptionsList', 'EncryptionController@getEncryptionsList');
+
+// 送出加密表單
+Route::post('encrypt', 'EncryptionController@encrypt');
+
+// 以下為測試路由
+
+Route::get('downloadFile', 'EncryptionController@downloadFile');
+
 Route::get('/encryption', 'EncryptionController@ceasar');
 
 Route::get('/generatePwd', 'EncryptionController@generatePwd');
+
+Route::get('/readFile', 'EncryptionController@readFile');
+
+Route::get('/fileUpload', function() {
+    return view('fileUpload');
+});
+Route::post('/fileUpload', 'EncryptionController@fileUpload');
