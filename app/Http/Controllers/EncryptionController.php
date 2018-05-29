@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\encryption\CaesarEncryption;
+use App\encryption\Base64Encryption;
+
 use App\encryption\RandomPassword;
 
 use App\CustomClass\PrepareFile;
@@ -15,6 +17,7 @@ class EncryptionController extends Controller
     public function getEncryptionsList() {
         $encryptions = [
             'Caesar',
+            'Base 64',
             'Others'
         ];
         
@@ -45,35 +48,27 @@ class EncryptionController extends Controller
                 $caesar->encrypt();
                 
                 // 密碼紀錄前綴
-                $prefix = '1-'.$movement.'-';
+                $prefix = $encryptionIndex.'-'.$movement.'-';
                 
                 // 檔案內容
                 $fileContent = $prefix.$caesar->cipherText;
                 break;
+            case 'Base 64' : 
+                $encryptionIndex = 2;
+                
+                $base64 = new Base64Encryption($data['password']);
+                
+                // 密碼前綴
+                $prefix = $encryptionIndex.'-';
+                
+                // 檔案內容
+                $fileContent = $prefix.$base64->encode();
+                break;
         }
-//        if($data['encryptionMethod'] == 'Caesar') {
-//            $encryptionIndex = 1;
-//            
-//            // 密碼位移量
-//            $movement = rand(1, 10);
-//            // 建立物件
-//            $caesar = new CaesarEncryption($data['password'], $movement);
-//            
-//            $caesar->encrypt();
-//            
-//            // 密碼紀錄前綴
-//            $prefix = '1-'.$movement.'-';
-//            
-//            // 檔案內容
-//            $fileContent = $prefix.$caesar->cipherText;
-//        }else {
-//            
-//        }
         
         $file = new PrepareFile($encryptionIndex, $fileContent);
         $file->write();
         
-//        echo 'File name : '.$file->fileName.'<br>';
         
         return view('encryptedFileDownload', [
             'fileName' => $file->fileName,
@@ -97,6 +92,11 @@ class EncryptionController extends Controller
     
     public function generatePwd() {
         $pwd = new RandomPassword(20, [1, 2, 3]);
+        
+        echo '<br>';
+        
+        // c3VwZXJuaWtraTEy
+        echo base64_decode('c3VwZXJuaWtraTEy');
     }
     
     public function readFile() {
