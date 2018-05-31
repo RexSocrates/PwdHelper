@@ -5,7 +5,7 @@ namespace App\encryption;
 class CaesarEncryption
 {
     public $plainText = "";
-    public $cipherText = "";
+    public $cypherText = "";
     
     public $offset = 0;
     
@@ -19,13 +19,14 @@ class CaesarEncryption
     
     
     
-    function __construct($plainText, $offset) {
-        $this->plainText = $plainText;
+    function __construct( $offset) {
         $this->offset = $offset;
     }
     
     // 加密
-    function encrypt() {
+    function encrypt($text) {
+        $this->plainText = $text;
+        
         $newCypherText = "";
         for($i = 0; $i < strlen($this->plainText); $i++) {
             $ch = $this->plainText[$i];
@@ -54,22 +55,30 @@ class CaesarEncryption
             }
         }
         
-        $this->cipherText = $newCypherText;
+        $this->cypherText = $newCypherText;
         
 //        echo $this->plainText.'<br>';
-//        echo $this->cipherText.'<br>';
+//        echo $this->cypherText.'<br>';
+        return $newCypherText;
     }
     
-    function decrypt() {
+    function decrypt($text) {
+        $this->cypherText = $text;
+        
+//        echo 'Text in caesar : '.$text.'<br>';
+//        echo 'Length : '.strlen($text).'<br>';
+        
         $decryptedText = "";
         
-        for($i = 0; $i < strlen($this->cipherText); $i++) {
-            $ch = $this->cipherText[$i];
+        for($i = 0; $i < strlen($text); $i++) {
+            $ch = $this->cypherText[$i];
             
             $newCh = "";
             
             // 如果目前的字元是數字
             if(ctype_digit($ch)) {
+//                echo 'Ch is digit<br>';
+                
                 // 如果數字 - offset 會變負數
                 if((intval($ch) - $this->offset) < 0) {
                     $newCh = (string)(intval($ch) - $this->offset + 10);
@@ -79,6 +88,7 @@ class CaesarEncryption
                 }
             }else {
                 // 目前的字元是字母
+//                echo 'Ch is characters<br>';
                 
                 // 如果是大寫
                 if(ctype_upper($ch)) {
@@ -109,10 +119,15 @@ class CaesarEncryption
                 }
             }
             
+//            echo 'New ch : '.$newCh.'<br>';
+            
             $decryptedText = $decryptedText.$newCh;
             
         }
-        echo 'Encrypted : '.$this->cipherText.'<br>';
-        echo 'Decrypted : '.$decryptedText.'<br>';
+//        echo 'Encrypted : '.$this->cypherText.'<br>';
+//        echo 'Decrypted : '.$decryptedText.'<br>';
+        $this->plainText = $decryptedText;
+        
+        return $decryptedText;
     }
 }

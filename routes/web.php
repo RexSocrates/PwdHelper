@@ -21,6 +21,12 @@ Route::get('getEncryptionsList', 'EncryptionController@getEncryptionsList');
 // 送出加密表單
 Route::post('encrypt', 'EncryptionController@encrypt');
 
+// 取得解密頁面
+Route::get('getDecryptionPage', 'EncryptionController@getDecryptionPage');
+
+// 送出表單並進行解密
+Route::post('decrypt', 'EncryptionController@decrypt');
+
 // 以下為測試路由
 
 Route::get('downloadFile', 'EncryptionController@downloadFile');

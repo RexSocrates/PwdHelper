@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
 
+// Encryption
 use App\encryption\CaesarEncryption;
 use App\encryption\Base64Encryption;
 use App\encryption\URLEncryption;
 
 use App\encryption\RandomPassword;
-
 use App\CustomClass\PrepareFile;
 
 class EncryptionController extends Controller
@@ -45,9 +47,9 @@ class EncryptionController extends Controller
                 // 密碼位移量
                 $movement = rand(1, 10);
                 // 建立物件
-                $caesar = new CaesarEncryption($data['password'], $movement);
+                $caesar = new CaesarEncryption($movement);
                 
-                $caesar->encrypt();
+                $caesar->encrypt($data['password']);
                 
                 // 密碼紀錄前綴
                 $prefix = $encryptionIndex.'-'.$movement.'-';
@@ -69,18 +71,17 @@ class EncryptionController extends Controller
             case 'URL encryption' :
                 $encryptionIndex = 3;
                 
-                $urlencryption = new URLEncryption($data['password']);
+                $urlencryption = new URLEncryption();
                 
                 // 密碼前綴
                 $prefix = $encryptionIndex.'-';
                 
                 // 檔案內容
-                $fileContent = $prefix.$urlencryption->encode();
+                $fileContent = $prefix.$urlencryption->encode($data['password']);
         }
         
         $file = new PrepareFile($encryptionIndex, $fileContent);
         $file->write();
-        
         
         return view('encryptedFileDownload', [
             'fileName' => $file->fileName,
@@ -88,20 +89,74 @@ class EncryptionController extends Controller
         
     }
     
-    // Testing function
+    // 取得解密頁面
+    public function getDecryptionPage() {
+        return view('textDecrypt');
+    }
     
+    // 送出表單並解密
+    public function decrypt(Request $request) {
+        $data = $request->all();
+        
+        // 取得加密後的文字
+        $cyphertext = $data['cypherText'];
+        
+        // 切割密文
+        $cypherArr = explode('-', $cyphertext);
+        
+        // 解析加密方式
+        
+        $plaintext = '';
+        echo 'Encryption : '.$cypherArr[0].'<br>';
+        
+        switch($cypherArr[0]) {
+            case '1' : 
+                // Caesar encryption
+                echo 'Caesar<br>';
+                
+                // 設定文字位移量
+                echo 'Offset : '.$cypherArr[1].'<br>';
+                $caesar = new CaesarEncryption($cypherArr[1]);
+                
+                // 進行解密
+                echo 'Cypher text : '.$cypherArr[2].'<br>';
+                $plaintext = $caesar->decrypt($cypherArr[2]);
+                break;
+            case '2' : 
+                // Base 64
+                echo 'base 64<br>';
+                $base = new Base64Encryption();
+                
+                $plaintext = $base->decode($cypherArr[1]);
+                
+                break;
+            case '3' : 
+                // URL
+                echo 'url<br>';
+                $urlEnc = new URLEncryption();
+                
+                $plaintext = $usrEnc->decrypt($cypherArr[1]);
+                break;
+        }
+        
+        echo 'Plain text : '.$plaintext.'<br>';
+    }
+    
+    // Testing function
     public function downloadFile() {
         return view('encryptedFileDownload');
     }
     
+    // 測試凱薩加密
     public function ceasar() {
-        $ceasar = new CaesarEncryption('TestaBC1290', 7);
+        $ceasar = new CaesarEncryption(7);
         
-        $ceasar->encrypt();
+        $ceasar->encrypt('TestaBC1290');
         echo '<br><br>';
-        $ceasar->decrypt();
+        $ceasar->decrypt($ceasar->encrypt('TestaBC1290'));
     }
     
+    // 測試隨機生成密碼
     public function generatePwd() {
         $pwd = new RandomPassword(20, [1, 2, 3]);
         
@@ -111,9 +166,52 @@ class EncryptionController extends Controller
         echo base64_decode('c3VwZXJuaWtraTEy');
     }
     
+    // 測試檔案讀取
     public function readFile() {
-        $file = fopen('test.txt', 'w');
-        fwrite($file, 'Hello world');
-        fclose($file);
+//        $file = fopen('test.txt', 'w');
+//        fwrite($file, 'Hello world');
+//        fclose($file);
+        
+        // 讀取server檔案
+        $exist = Storage::disk('public')->exists('public/keyFile1.txt');
+        echo 'Exist : '.var_dump($exist).'<br>';
+        
+//        $content = Storage::get($url);
+        
+//        echo $content;
+        
+    }
+    
+    // 測試上傳檔案
+    public function fileUpload(Request $request) {
+        if($request->hasFile('keyFile')) {
+            echo 'There is a file';
+            
+            $path = $request->keyFile->storeAs('user_upload', 'keyFile1.txt');
+            echo $path;
+            
+//            $file = fopen('storage/app/user_upload/keyFile1.txt', 'r');
+        }else {
+            echo 'There is no file in the package.';
+        }
+        echo '<br>';
+        
+//        $data = $request->all();
+        
+//        echo var_dump($data);
+        
+//        $file = Input::file('keyFile');
+        
+//        echo $file->getClientOriginalName();
+        
+//        $file = $request->file('keyFile');
+        
+//        echo $file->getClientOriginalName();
+        
+//        $myFile = fopen($file, 'r');
+//        echo fgets($myFile);
+//        fclose($myFile);
+        
+        
     }
 }
