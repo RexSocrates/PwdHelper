@@ -41,3 +41,5 @@ Route::get('/fileUpload', function() {
     return view('fileUpload');
 });
 Route::post('/fileUpload', 'EncryptionController@fileUpload');
+
+Route ::get('desencryption','DesEncryptionController@doDes');
