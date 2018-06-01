@@ -41,5 +41,5 @@ Route::get('/fileUpload', function() {
     return view('fileUpload');
 });
 Route::post('/fileUpload', 'EncryptionController@fileUpload');
-
+//des加密測試網址
 Route ::get('desencryption','DesEncryptionController@doDes');

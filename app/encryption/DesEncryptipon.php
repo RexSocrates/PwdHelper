@@ -8,7 +8,7 @@
 
 namespace App\encryption;
 
-
+//實作des ebc加密
 class DesEncryptipon
 {
     private $_secureKey="1234abcd";
