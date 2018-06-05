@@ -29,6 +29,8 @@ Route::post('decrypt', 'EncryptionController@decrypt');
 
 // 以下為測試路由
 
+Route::get('testURL', 'EncryptionController@test');
+
 Route::get('downloadFile', 'EncryptionController@downloadFile');
 
 Route::get('/encryption', 'EncryptionController@ceasar');

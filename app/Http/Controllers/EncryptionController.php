@@ -55,7 +55,7 @@ class EncryptionController extends Controller
                 $prefix = $encryptionIndex.'-'.$movement.'-';
                 
                 // 檔案內容
-                $fileContent = $prefix.$caesar->cipherText;
+                $fileContent = $prefix.$caesar->cypherText;
                 break;
             case 'Base 64' : 
                 $encryptionIndex = 2;
@@ -135,7 +135,7 @@ class EncryptionController extends Controller
                 echo 'url<br>';
                 $urlEnc = new URLEncryption();
                 
-                $plaintext = $usrEnc->decrypt($cypherArr[1]);
+                $plaintext = $urlEnc->decode($cypherArr[1]);
                 break;
         }
         
@@ -154,6 +154,17 @@ class EncryptionController extends Controller
         $ceasar->encrypt('TestaBC1290');
         echo '<br><br>';
         $ceasar->decrypt($ceasar->encrypt('TestaBC1290'));
+    }
+    
+    // 測URL加密
+    public function test() {
+        $mix = new URLEncryption();
+        
+        $str = 'abc123';
+        
+        $cypher = $mix->encode($str);
+        echo $cypher.'<br>';
+        echo $mix->decode($cypher).'<br>';
     }
     
     // 測試隨機生成密碼
