@@ -34,8 +34,12 @@ class EncryptionController extends Controller
     // 送出密碼內容後進行加密
     public function encrypt(Request $request) {
         $data = $request->all();
-//        echo 'Password : '.$data['password'].'<br>';
-//        echo 'Encryption : '.$data['encryptionMethod'].'<br>';
+        
+        // 網站名稱
+        $websiteName = $data['websiteName'];
+        
+        // 帳號名稱
+        $accountName = $data['accountName'];
         
         // 初始化記錄密文的變數
         $encryptionIndex = 0;
@@ -47,27 +51,43 @@ class EncryptionController extends Controller
                 
                 // 密碼位移量
                 $movement = rand(1, 10);
-                // 建立物件
+                
+                // 建立密碼加密物件
                 $caesar = new CaesarEncryption($movement);
                 
-                $caesar->encrypt($data['password']);
+                $pwdCipher = $caesar->encrypt($data['password']);
                 
                 // 密碼紀錄前綴
                 $prefix = $encryptionIndex.'-'.$movement.'-';
                 
-                // 檔案內容
-                $fileContent = $prefix.$caesar->cipherText;
+                // 網站名稱的密文
+                $siteNameCipher = $caesar->encrypt($websiteName);
+                
+                // 帳號的密文
+                $accountCipher = $caesar->encrypt($accountName);
+                
+                // 檔案內容加入密碼部分，檔案內容：加密編號0-移動量1-網站名稱2-帳號名稱3-密碼4
+                $fileContent = $prefix.$siteNameCipher.'-'.$accountCipher.'-'.$pwdCipher;
                 break;
             case 'Base 64' : 
                 $encryptionIndex = 2;
                 
-                $base64 = new Base64Encryption($data['password']);
+                $base64 = new Base64Encryption();
                 
                 // 密碼前綴
                 $prefix = $encryptionIndex.'-';
                 
-                // 檔案內容
-                $fileContent = $prefix.$base64->encode();
+                // 網站名稱
+                $siteNameCipher = $base64->encode($websiteName);
+                
+                // 帳號名稱
+                $accountCipher = $base64->encode($accountName);
+                
+                // 密碼
+                $pwdCipher = $base64->encode($data['password']);
+                
+                // 檔案內容，檔案內容：加密編號0-網站名稱1-帳號名稱2-密碼3
+                $fileContent = $prefix.$siteNameCipher.'-'.$accountCipher.'-'.$pwdCipher;
                 break;
             case 'URL encryption' :
                 $encryptionIndex = 3;
@@ -77,16 +97,38 @@ class EncryptionController extends Controller
                 // 密碼前綴
                 $prefix = $encryptionIndex.'-';
                 
-                // 檔案內容
-                $fileContent = $prefix.$urlencryption->encode($data['password']);
+                // 網站名稱
+                $siteNameCipher = $urlencryption->encode($websiteName);
+                
+                // 帳號名稱
+                $accountCipher = $urlencryption->encode($accountName);
+                
+                // 密碼
+                $pwdCipher = $urlencryption->encode($data['password']);
+                
+                // 檔案內容，檔案內容：加密編號0-網站名稱1-帳號名稱2-密碼3
+                $fileContent = $prefix.$siteNameCipher.'-'.$accountCipher.'-'.$pwdCipher;
                 break;
             case 'DES' :
                 $encryptionIndex = 4;
                 
-                $desEncryption = new DesEncryptipon();
+                // 金鑰使用 123456789
+                $desEncryption = new DesEncryptipon('123456789');
                 
                 // 密碼前綴
-                $prefix = $encryptionIndex.'-'
+                $prefix = $encryptionIndex.'-';
+                
+                // 網站名稱
+                $siteNameCipher = $desEncryption->encrypt($websiteName);
+                
+                // 帳號名稱
+                $accountCipher = $desEncryption->encrypt($accountName);
+                
+                // 密碼
+                $pwdCipher = $desEncryption->encrypt($data['password']);
+                
+                // 檔案內容，檔案內容：加密編號0-網站名稱1-帳號名稱2-密碼3
+                $fileContent = $prefix.$siteNameCipher.'-'.$accountCipher.'-'.$pwdCipher;
         }
         
         $file = new PrepareFile($encryptionIndex, $fileContent);
@@ -105,6 +147,11 @@ class EncryptionController extends Controller
     
     // 送出表單並解密
     public function decrypt(Request $request) {
+        // Plain text
+        $siteName = '';
+        $accountName = '';
+        $pwd = '';
+        
         $data = $request->all();
         
         // 取得加密後的文字
@@ -114,8 +161,6 @@ class EncryptionController extends Controller
         $cipherArr = explode('-', $ciphertext);
         
         // 解析加密方式
-        
-        $plaintext = '';
         echo 'Encryption : '.$cipherArr[0].'<br>';
         
         switch($cipherArr[0]) {
@@ -128,15 +173,24 @@ class EncryptionController extends Controller
                 $caesar = new CaesarEncryption($cipherArr[1]);
                 
                 // 進行解密
-                echo 'Cypher text : '.$cipherArr[2].'<br>';
-                $plaintext = $caesar->decrypt($cipherArr[2]);
+                $siteName = $caesar->decrypt($cipherArr[2]);
+//                echo '網站名稱 : '.$siteName.'<br>';
+                
+                $accountName = $caesar->decrypt($cipherArr[3]);
+//                echo '帳號名稱 : '.$plain$accountNametext.'<br>';
+                
+                $pwd = $caesar->decrypt($cipherArr[4]);
+//                echo '密碼名稱 : '.$pwd.'<br>';
+                
                 break;
             case '2' : 
                 // Base 64
                 echo 'base 64<br>';
                 $base = new Base64Encryption();
                 
-                $plaintext = $base->decode($cipherArr[1]);
+                $siteName = $base->decode($cipherArr[1]);
+                $accountName = $base->decode($cipherArr[2]);
+                $pwd = $base->decode($cipherArr[3]);
                 
                 break;
             case '3' : 
@@ -144,11 +198,25 @@ class EncryptionController extends Controller
                 echo 'url<br>';
                 $urlEnc = new URLEncryption();
                 
-                $plaintext = $urlEnc->decode($cipherArr[1]);
+                $siteName = $urlEnc->decode($cipherArr[1]);
+                $accountName = $urlEnc->decode($cipherArr[2]);
+                $pwd = $urlEnc->decode($cipherArr[3]);
+                
                 break;
+            case '4' :
+                echo 'DES<br>';
+                
+                $des = new DesEncryptipon('123456789');
+                
+                $siteName = $des->decrypt($cipherArr[1]);
+                $accountName = $des->decrypt($cipherArr[2]);
+                $pwd = $des->decrypt($cipherArr[3]);
         }
         
-        echo 'Plain text : '.$plaintext.'<br>';
+        echo '網站名稱：'.$siteName.'<br>';
+        echo '帳號名稱：'.$accountName.'<br>';
+        echo '密碼名稱：'.$pwd.'<br>';
+        
     }
     
     // Testing function

@@ -15,23 +15,31 @@ class DesEncryptipon
     public $plainText="";
     public $cipherText="";
 
-    function __construct($plainText,$_secureKey)
+    function __construct($_secureKey)
     {
-        $this->plainText=$plainText;
+//        $this->plainText=$plainText;
         $this->_secureKey=$_secureKey;
     }
+    
     //加密
-    function encrypt(){
-        $this->cipherText=openssl_encrypt($this->plainText,'des-ecb',$this->_secureKey);
-        echo $this->plainText.'<br>';
-        echo 'key : '.$this->_secureKey.'<br>';
-        echo $this->cipherText.'<br>';
+    function encrypt($plainText){
+        $this->cipherText=openssl_encrypt($plainText,'des-ecb',$this->_secureKey);
+        
+//        echo $this->plainText.'<br>';
+//        echo 'key : '.$this->_secureKey.'<br>';
+//        echo $this->cipherText.'<br>';
+        
+        return $this->cipherText;
     }
+    
     //解密
-    function decrypt(){
-        $decryptedText=openssl_decrypt($this->cipherText,'des-ecb',$this->_secureKey);
-        echo 'Encrypted : '.$this->cipherText.'<br>';
-        echo 'Key : '.$this->_secureKey.'<br>';
-        echo 'Decrypted : '.$decryptedText.'<br>';
+    function decrypt($cipherText){
+        $decryptedText=openssl_decrypt($cipherText,'des-ecb',$this->_secureKey);
+        
+//        echo 'Encrypted : '.$this->cipherText.'<br>';
+//        echo 'Key : '.$this->_secureKey.'<br>';
+//        echo 'Decrypted : '.$decryptedText.'<br>';
+        
+        return $decryptedText;
     }
 }

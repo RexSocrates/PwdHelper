@@ -12,9 +12,10 @@ use App\encryption\DesEncryptipon;
 class DesEncryptionController extends Controller
 {
     public function doDes(){
-        $des=new DesEncryptipon('test data','12345678');//若是成功會出現 l9TN9Ln/71IvFRjlhD8PaQ==
-        $des->encrypt();
+        $des=new DesEncryptipon('12345678');//若是成功會出現 l9TN9Ln/71IvFRjlhD8PaQ==
+        $cipherText = $des->encrypt('test data');
+        echo $cipherText;
         echo  '<br><br>';
-        $des->decrypt();
+        echo $des->decrypt($cipherText);
     }
 }

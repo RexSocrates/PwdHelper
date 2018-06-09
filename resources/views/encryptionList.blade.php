@@ -6,9 +6,16 @@
         <form action="encrypt" method="post">
             {{ csrf_field() }}
             
-            <label>請輸入密碼：</label>
-            <input type="password" name="password">
+            <label>請輸入網站名稱 : </label>
+            <input type="text" name="websiteName">
+            <br>
             
+            <label>請輸入帳號名稱 : </label>
+            <input type="text" name="accountName">
+            <br>
+            
+            <label>請輸入密碼 : </label>
+            <input type="password" name="password">
             <br>
             
             <label>加密列表</label>
