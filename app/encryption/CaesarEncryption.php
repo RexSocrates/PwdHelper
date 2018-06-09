@@ -5,7 +5,7 @@ namespace App\encryption;
 class CaesarEncryption
 {
     public $plainText = "";
-    public $cypherText = "";
+    public $cipherText = "";
     
     public $offset = 0;
     
@@ -55,15 +55,15 @@ class CaesarEncryption
             }
         }
         
-        $this->cypherText = $newCypherText;
+        $this->cipherText = $newCypherText;
         
 //        echo $this->plainText.'<br>';
-//        echo $this->cypherText.'<br>';
+//        echo $this->cipherText.'<br>';
         return $newCypherText;
     }
     
     function decrypt($text) {
-        $this->cypherText = $text;
+        $this->cipherText = $text;
         
 //        echo 'Text in caesar : '.$text.'<br>';
 //        echo 'Length : '.strlen($text).'<br>';
@@ -71,7 +71,7 @@ class CaesarEncryption
         $decryptedText = "";
         
         for($i = 0; $i < strlen($text); $i++) {
-            $ch = $this->cypherText[$i];
+            $ch = $this->cipherText[$i];
             
             $newCh = "";
             
@@ -124,7 +124,7 @@ class CaesarEncryption
             $decryptedText = $decryptedText.$newCh;
             
         }
-//        echo 'Encrypted : '.$this->cypherText.'<br>';
+//        echo 'Encrypted : '.$this->cipherText.'<br>';
 //        echo 'Decrypted : '.$decryptedText.'<br>';
         $this->plainText = $decryptedText;
         

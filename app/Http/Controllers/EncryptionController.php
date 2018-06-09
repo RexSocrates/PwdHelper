@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use App\encryption\CaesarEncryption;
 use App\encryption\Base64Encryption;
 use App\encryption\URLEncryption;
+use App\encryption\DesEncryptipon;
 
 use App\encryption\RandomPassword;
 use App\CustomClass\PrepareFile;
@@ -22,7 +23,7 @@ class EncryptionController extends Controller
             'Caesar',
             'Base 64',
             'URL encryption',
-            'Others'
+            'DES'
         ];
         
         return view('encryptionList', [
@@ -55,7 +56,7 @@ class EncryptionController extends Controller
                 $prefix = $encryptionIndex.'-'.$movement.'-';
                 
                 // 檔案內容
-                $fileContent = $prefix.$caesar->cypherText;
+                $fileContent = $prefix.$caesar->cipherText;
                 break;
             case 'Base 64' : 
                 $encryptionIndex = 2;
@@ -78,6 +79,14 @@ class EncryptionController extends Controller
                 
                 // 檔案內容
                 $fileContent = $prefix.$urlencryption->encode($data['password']);
+                break;
+            case 'DES' :
+                $encryptionIndex = 4;
+                
+                $desEncryption = new DesEncryptipon();
+                
+                // 密碼前綴
+                $prefix = $encryptionIndex.'-'
         }
         
         $file = new PrepareFile($encryptionIndex, $fileContent);
@@ -99,35 +108,35 @@ class EncryptionController extends Controller
         $data = $request->all();
         
         // 取得加密後的文字
-        $cyphertext = $data['cypherText'];
+        $ciphertext = $data['cypherText'];
         
         // 切割密文
-        $cypherArr = explode('-', $cyphertext);
+        $cipherArr = explode('-', $ciphertext);
         
         // 解析加密方式
         
         $plaintext = '';
-        echo 'Encryption : '.$cypherArr[0].'<br>';
+        echo 'Encryption : '.$cipherArr[0].'<br>';
         
-        switch($cypherArr[0]) {
+        switch($cipherArr[0]) {
             case '1' : 
                 // Caesar encryption
                 echo 'Caesar<br>';
                 
                 // 設定文字位移量
-                echo 'Offset : '.$cypherArr[1].'<br>';
-                $caesar = new CaesarEncryption($cypherArr[1]);
+                echo 'Offset : '.$cipherArr[1].'<br>';
+                $caesar = new CaesarEncryption($cipherArr[1]);
                 
                 // 進行解密
-                echo 'Cypher text : '.$cypherArr[2].'<br>';
-                $plaintext = $caesar->decrypt($cypherArr[2]);
+                echo 'Cypher text : '.$cipherArr[2].'<br>';
+                $plaintext = $caesar->decrypt($cipherArr[2]);
                 break;
             case '2' : 
                 // Base 64
                 echo 'base 64<br>';
                 $base = new Base64Encryption();
                 
-                $plaintext = $base->decode($cypherArr[1]);
+                $plaintext = $base->decode($cipherArr[1]);
                 
                 break;
             case '3' : 
@@ -135,7 +144,7 @@ class EncryptionController extends Controller
                 echo 'url<br>';
                 $urlEnc = new URLEncryption();
                 
-                $plaintext = $urlEnc->decode($cypherArr[1]);
+                $plaintext = $urlEnc->decode($cipherArr[1]);
                 break;
         }
         
