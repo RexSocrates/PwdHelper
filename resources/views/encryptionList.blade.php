@@ -28,5 +28,6 @@
             <br>
             <input type="submit" name="submit" value="送出">
         </form>
+        <a href="/">回主頁面</a>
     </body>
 </html>

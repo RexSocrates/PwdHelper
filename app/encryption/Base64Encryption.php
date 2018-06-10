@@ -12,7 +12,7 @@ class Base64Encryption
     }
     
     // 加密
-    public function encode($text) {
+    public function encrypt($text) {
         $this->plainText = $text;
         
         $this->cypherText = base64_encode($this->plainText);
@@ -20,7 +20,7 @@ class Base64Encryption
     }
     
     // 解密
-    public function decode($text) {
+    public function decrypt($text) {
         $this->cypherText = $text;
         
         $this->plainText = base64_decode($this->cypherText);

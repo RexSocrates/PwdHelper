@@ -63,11 +63,13 @@ class RandomPassword
                     $newCh = $this->symbol[rand(0, strlen($this->symbol) - 1)];
                     break;
             }
-            echo 'The new character : '.$newCh.'<br>';
+//            echo 'The new character : '.$newCh.'<br>';
             $newPwd = $newPwd.$newCh;
         }while(strlen($newPwd) < $this->pwdLength);
         
-        echo 'New password : '.$newPwd;
+//        echo 'New password : '.$newPwd;
         $this->pwd = $newPwd;
+        
+        return $newPwd;
     }
 }

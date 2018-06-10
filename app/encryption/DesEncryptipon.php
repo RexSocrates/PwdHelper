@@ -22,7 +22,7 @@ class DesEncryptipon
     }
     
     //加密
-    function encrypt($plainText){
+    public function encrypt($plainText){
         $this->cipherText=openssl_encrypt($plainText,'des-ecb',$this->_secureKey);
         
 //        echo $this->plainText.'<br>';
@@ -33,7 +33,7 @@ class DesEncryptipon
     }
     
     //解密
-    function decrypt($cipherText){
+    public function decrypt($cipherText){
         $decryptedText=openssl_decrypt($cipherText,'des-ecb',$this->_secureKey);
         
 //        echo 'Encrypted : '.$this->cipherText.'<br>';

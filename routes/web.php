@@ -11,21 +11,27 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+
+// 載入功能列鰾
+Route::get('/', 'EncryptionController@getFunctionsList');
 
 // 取得密碼加密輸入頁面以及加密列表
 Route::get('getEncryptionsList', 'EncryptionController@getEncryptionsList');
-
 // 送出加密表單
 Route::post('encrypt', 'EncryptionController@encrypt');
 
 // 取得解密頁面
 Route::get('getDecryptionPage', 'EncryptionController@getDecryptionPage');
-
 // 送出表單並進行解密
 Route::post('decrypt', 'EncryptionController@decrypt');
+
+// 取得隨機生成密碼的頁面
+Route::get('randomPwd', 'EncryptionController@getRandomPwdPage');
+// 送出表單，產生隨機密碼，接著進行加密
+Route::post('randomPwd', 'EncryptionController@getRandomPwd');
 
 // 以下為測試路由
 
