@@ -166,10 +166,10 @@ class EncryptionController extends Controller
         switch($cipherArr[0]) {
             case '1' : 
                 // Caesar encryption
-                echo 'Caesar<br>';
+//                echo 'Caesar<br>';
                 
                 // 設定文字位移量
-                echo 'Offset : '.$cipherArr[1].'<br>';
+//                echo 'Offset : '.$cipherArr[1].'<br>';
                 $caesar = new CaesarEncryption($cipherArr[1]);
                 
                 // 進行解密
@@ -185,7 +185,8 @@ class EncryptionController extends Controller
                 break;
             case '2' : 
                 // Base 64
-                echo 'base 64<br>';
+//                echo 'base 64<br>';
+                
                 $base = new Base64Encryption();
                 
                 $siteName = $base->decode($cipherArr[1]);
@@ -195,7 +196,8 @@ class EncryptionController extends Controller
                 break;
             case '3' : 
                 // URL
-                echo 'url<br>';
+//                echo 'url<br>';
+                
                 $urlEnc = new URLEncryption();
                 
                 $siteName = $urlEnc->decode($cipherArr[1]);
@@ -204,7 +206,7 @@ class EncryptionController extends Controller
                 
                 break;
             case '4' :
-                echo 'DES<br>';
+//                echo 'DES<br>';
                 
                 $des = new DesEncryptipon('123456789');
                 
@@ -213,9 +215,21 @@ class EncryptionController extends Controller
                 $pwd = $des->decrypt($cipherArr[3]);
         }
         
-        echo '網站名稱：'.$siteName.'<br>';
-        echo '帳號名稱：'.$accountName.'<br>';
-        echo '密碼名稱：'.$pwd.'<br>';
+//        echo '網站名稱：'.$siteName.'<br>';
+//        echo '帳號名稱：'.$accountName.'<br>';
+//        echo '密碼名稱：'.$pwd.'<br>';
+        
+        $pwdDic = [
+            'websiteName' => $siteName,
+            'accountName' => $accountName,
+            'pwd' => $pwd
+        ];
+        
+        $pwdList = [$pwdDic];
+        
+        return view('passwordlist', [
+            'pwdList' => $pwdList
+        ]);
         
     }
     

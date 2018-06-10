@@ -18,11 +18,18 @@
             </thead>
 
             <tbody>
-            <tr>
-                <td>www.fju.edu.tw</td>
-                <td>haha</td>
-                <td>1234</td>
-            </tr>
+                @foreach($pwdList as $pwd)
+                    <tr>
+                        <td>{{ $pwd['websiteName'] }}</td>
+                        <td>{{ $pwd['accountName'] }}</td>
+                        <td>{{ $pwd['pwd'] }}</td>
+                    </tr>
+                @endforeach
+                <tr>
+                    <td>www.fju.edu.tw</td>
+                    <td>haha</td>
+                    <td>1234</td>
+                </tr>
                 <tr>
                     <td>www.google.com</td>
                     <td>jaja</td>
@@ -73,16 +80,16 @@
                     <td>wang</td>
                     <td>654321</td>
                 </tr>
-            <tr>
-                <td>台灣銀行</td>
-                <td>wang</td>
-                <td>654321</td>
-            </tr>
-            <tr>
-                <td>輔大銀行</td>
-                <td>wang</td>
-                <td>654321</td>
-            </tr>
+                <tr>
+                    <td>台灣銀行</td>
+                    <td>wang</td>
+                    <td>654321</td>
+                </tr>
+                <tr>
+                    <td>輔大銀行</td>
+                    <td>wang</td>
+                    <td>654321</td>
+                </tr>
             </tbody>
         </table>
 
