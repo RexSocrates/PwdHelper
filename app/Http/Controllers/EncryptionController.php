@@ -19,7 +19,7 @@ class EncryptionController extends Controller
 {
     // 取得功能列表(主頁面)
     public function getFunctionsList() {
-        return view('functionsList');
+        return view('index');
     }
     
     // 取得所有加密方式的列表頁面
