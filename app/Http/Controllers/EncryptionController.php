@@ -277,6 +277,48 @@ class EncryptionController extends Controller
         ]);
     }
     
+    // 取得更換加密方式的頁面
+    public function getEncryptionChangePage() {
+        $encryptions = [
+            'Caesar',
+            'Base 64',
+            'URL encryption',
+            'DES'
+        ];
+        
+        return view('changeEncryption', [
+            'encryptions' => $encryptions
+        ]);
+    }
+    
+    // 送出表單並更換加密方式
+    public function changeEncryptionMethod(Request $request) {
+        $data = $request->all();
+        
+        // 取得新的加密方式
+        $newEncryptionMethod = $data['newEncryptionMethod'];
+        
+        // 讀取密文並解密
+        $cipherText = $data['cipherText'];
+        
+        $pwdDic = $this->getPlainText(explode('-', $cipherText));
+        
+        // 取得解密過後的各項資料
+        $websiteName = $pwdDic['websiteName'];
+        $accountName = $pwdDic['accountName'];
+        $pwd = $pwdDic['pwd'];
+        
+        // 加資料進行加密並取得加密過後的檔案內容
+        $fileContent = $this->getCipherText($newEncryptionMethod, $websiteName, $accountName, $pwd);
+        
+        $file = new PrepareFile($fileContent['encryptionIndex'], $fileContent['text']);
+        $file->write();
+        
+        return view('encryptedFileDownload', [
+            'fileName' => $file->fileName,
+        ]);
+    }
+    
     // Testing function
     public function downloadFile() {
         return view('encryptedFileDownload');

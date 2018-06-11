@@ -33,6 +33,11 @@ Route::get('randomPwd', 'EncryptionController@getRandomPwdPage');
 // 送出表單，產生隨機密碼，接著進行加密
 Route::post('randomPwd', 'EncryptionController@getRandomPwd');
 
+// 更換加密方式
+Route::get('changeEncryptionMethod', 'EncryptionController@getEncryptionChangePage');
+// 送出表單更換加密方式
+Route::post('changeEncryptionMethod', 'EncryptionController@changeEncryptionMethod');
+
 // 以下為測試路由
 
 Route::get('testURL', 'EncryptionController@test');
