@@ -32,7 +32,8 @@ class EncryptionController extends Controller
         ];
         
         return view('encryptionList', [
-            'encryptions' => $encryptions
+            'encryptions' => $encryptions,
+            'update' => FALSE
         ]);
     }
     
@@ -141,6 +142,9 @@ class EncryptionController extends Controller
         
         // 取得明文
         $pwdDic = $this->getPlainText($cipherArr);
+        
+        // 將加密後的文字也放入字典中
+        $pwdDic['cipherText'] = $ciphertext;
         
         $pwdList = [$pwdDic];
         
@@ -316,6 +320,36 @@ class EncryptionController extends Controller
         
         return view('encryptedFileDownload', [
             'fileName' => $file->fileName,
+        ]);
+    }
+    
+    // 送出變更密碼的表單並將使用者導向加密頁面
+    public function changePwd(Request $request) {
+        $data = $request->all();
+        
+        $cipherText = $data['cipherText'];
+        
+        $pwdDic = $this->getPlainText(explode('-', $cipherText));
+        
+        // 取得未加密的資料
+        $websiteName = $pwdDic['websiteName'];
+        $accountName = $pwdDic['accountName'];
+        $pwd = $pwdDic['pwd'];
+        
+        // 加密列表
+        $encryptions = [
+            'Caesar',
+            'Base 64',
+            'URL encryption',
+            'DES'
+        ];
+        
+        return view('encryptionList', [
+            'websiteName' => $websiteName,
+            'accountName' => $accountName,
+            'pwd' => $pwd,
+            'encryptions' => $encryptions,
+            'update' => TRUE
         ]);
     }
     

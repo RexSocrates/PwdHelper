@@ -14,6 +14,7 @@
                     <th>網站名稱</th>
                     <th>帳號</th>
                     <th>密碼</th>
+                    <th>功能</th>
                 </tr>
             </thead>
 
@@ -23,6 +24,13 @@
                         <td>{{ $pwd['websiteName'] }}</td>
                         <td>{{ $pwd['accountName'] }}</td>
                         <td>{{ $pwd['pwd'] }}</td>
+                        <td>
+                            <form action="changePwd" method="post">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="cipherText" value="{{ $pwd['cipherText'] }}">
+                                <input type="submit" name="submit" value="更新資料">
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

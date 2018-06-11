@@ -38,6 +38,9 @@ Route::get('changeEncryptionMethod', 'EncryptionController@getEncryptionChangePa
 // 送出表單更換加密方式
 Route::post('changeEncryptionMethod', 'EncryptionController@changeEncryptionMethod');
 
+// 送出表單變更密碼
+Route::post('changePwd', 'EncryptionController@changePwd');
+
 // 以下為測試路由
 
 Route::get('testURL', 'EncryptionController@test');
