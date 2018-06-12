@@ -98,7 +98,7 @@ class EncryptionController extends Controller
                 $encryptionMethodIndex = 4;
                 
                 // 金鑰使用 123456789
-                $desEncryption = new DesEncryptipon('123456789');
+                $encryptionVar = new DesEncryptipon('12345678');
                 
                 $prefix = $encryptionMethodIndex.'-';
         }
